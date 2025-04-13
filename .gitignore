@@ -139,3 +139,7 @@ cython_debug/
 .idea/
 
 *.pyc
+
+votes.db
+.venv/
+
