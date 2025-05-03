@@ -1,19 +1,64 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- main
+  branches:
+    include:
+      - main
 
-pool:
-  name: crc-test
+parameters:
+- name: buildImage
+  displayName: 'Build Docker image?'
+  type: boolean
+  default: true
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  dockerImage:  m1328/discord-movie-bot:latest
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+- stage: Test
+  displayName: 'Run tests'
+  jobs:
+    - job: PyTest
+      displayName: 'Install deps, run pytest and black'
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+        - checkout: self
+
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: '3.12'
+
+        - script: |
+            python -m venv venv
+            source venv/bin/activate
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+          displayName: 'Install dependencies'
+
+        - script: |
+            source venv/bin/activate
+            pytest tests
+          displayName: 'Run tests with pytest'
+
+        - script: |
+            source venv/bin/activate
+            black --check src
+          displayName: 'Run black style check'
+
+- stage: Docker
+  displayName: 'Build and push Docker image'
+  condition: and(succeeded(), eq('${{ parameters.buildImage }}', true))
+  jobs:
+    - job: DockerBuild
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+        - checkout: self
+
+        - task: Docker@2
+          inputs:
+            command: 'buildAndPush'
+            containerRegistry: 'DockerHubConnection'
+            repository: 'm1328/discord-bot'
+            Dockerfile: 'Dockerfile'
+            tags: |
+              latest
