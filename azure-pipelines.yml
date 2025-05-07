@@ -21,6 +21,10 @@ stages:
       pool:
          name: 'discord-bot'
       steps:
+        - powershell: |
+            Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process -Force
+          displayName: 'Temporarily allow PowerShell scripts'
+
         - checkout: self
 
         - task: UsePythonVersion@0
