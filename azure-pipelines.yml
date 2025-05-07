@@ -10,7 +10,9 @@ parameters:
   default: true
 
 variables:
-  dockerImage: m1328/discord-movie-bot:latest
+  - group: moviebot-credentials
+  - name: dockerImage
+    value: m1328/discord-movie-bot:latest
 
 stages:
 - stage: Test
@@ -20,8 +22,6 @@ stages:
       displayName: 'Install deps, run pytest and black'
       pool:
         name: 'discord-bot'
-        variables:
-          - group: moviebot-credentials
       steps:
         - powershell: |
             Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process -Force
@@ -39,18 +39,12 @@ stages:
             python -m pip install --upgrade pip
             pip install -r src/requirements.txt
           displayName: 'Install dependencies'
-          
-        - powershell: |
-            Get-ChildItem Env: | Sort-Object Name
-          displayName: 'DEBUG: Dump all ENV vars'
 
         - powershell: |
-            if ($env:TMDB_API_KEY) {
-              Write-Host "TMDB_API_KEY is set"
-            } else {
-              Write-Host "TMDB_API_KEY is NOT set"
-            }
-          displayName: 'DEBUG: Check TMDB_API_KEY'
+            echo "TMDB_API_KEY=$env:TMDB_API_KEY" > .env
+            echo "DISCORD_TOKEN=$env:DISCORD_TOKEN" >> .env
+            echo "COHERE_API_KEY=$env:COHERE_API_KEY" >> .env
+          displayName: 'Create .env file from Azure secrets'
 
         - powershell: |
             .\venv\Scripts\python.exe -m pytest tests
