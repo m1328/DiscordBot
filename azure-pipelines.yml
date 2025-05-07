@@ -10,7 +10,7 @@ parameters:
   default: true
 
 variables:
-  dockerImage:  m1328/discord-movie-bot:latest
+  dockerImage: m1328/discord-movie-bot:latest
 
 stages:
 - stage: Test
@@ -19,7 +19,7 @@ stages:
     - job: PyTest
       displayName: 'Install deps, run pytest and black'
       pool:
-         name: 'discord-bot'
+        name: 'discord-bot'
       steps:
         - powershell: |
             Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process -Force
@@ -38,15 +38,15 @@ stages:
             pip install -r src/requirements.txt
           displayName: 'Install dependencies'
 
-        - script: |
-            source venv/bin/activate
-            pytest tests
-          displayName: 'Run tests with pytest'
+        - powershell: |
+            .\venv\Scripts\Activate.ps1
+            pytest src
+          displayName: 'Run tests with pytest (Windows)'
 
-        - script: |
-            source venv/bin/activate
+        - powershell: |
+            .\venv\Scripts\Activate.ps1
             black --check src
-          displayName: 'Run black style check'
+          displayName: 'Run black style check (Windows)'
 
 - stage: Docker
   displayName: 'Build and push Docker image'
