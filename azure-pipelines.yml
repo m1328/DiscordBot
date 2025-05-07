@@ -41,6 +41,10 @@ stages:
           displayName: 'Install dependencies'
           
         - powershell: |
+            Get-ChildItem Env: | Sort-Object Name
+          displayName: 'DEBUG: Dump all ENV vars'
+
+        - powershell: |
             if ($env:TMDB_API_KEY) {
               Write-Host "TMDB_API_KEY is set"
             } else {
