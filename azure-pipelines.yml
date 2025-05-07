@@ -41,9 +41,9 @@ stages:
           displayName: 'Install dependencies'
 
         - powershell: |
-            echo "TMDB_API_KEY=$env:TMDB_API_KEY" > .env
-            echo "DISCORD_TOKEN=$env:DISCORD_TOKEN" >> .env
-            echo "COHERE_API_KEY=$env:COHERE_API_KEY" >> .env
+            Set-Content .env "TMDB_API_KEY=$env:TMDB_API_KEY"
+            Add-Content .env "DISCORD_TOKEN=$env:DISCORD_TOKEN"
+            Add-Content .env "COHERE_API_KEY=$env:COHERE_API_KEY"
           displayName: 'Create .env file from Azure secrets'
 
         - powershell: |
