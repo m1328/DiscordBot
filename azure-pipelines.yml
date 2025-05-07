@@ -39,6 +39,14 @@ stages:
             python -m pip install --upgrade pip
             pip install -r src/requirements.txt
           displayName: 'Install dependencies'
+          
+        - powershell: |
+            if ($env:TMDB_API_KEY) {
+              Write-Host "TMDB_API_KEY is set"
+            } else {
+              Write-Host "TMDB_API_KEY is NOT set"
+            }
+          displayName: 'DEBUG: Check TMDB_API_KEY'
 
         - powershell: |
             .\venv\Scripts\python.exe -m pytest tests
