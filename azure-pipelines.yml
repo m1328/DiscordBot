@@ -40,12 +40,12 @@ stages:
 
         - powershell: |
             .\venv\Scripts\Activate.ps1
-            pytest src
+            pytest tests
           displayName: 'Run tests with pytest (Windows)'
 
         - powershell: |
             .\venv\Scripts\Activate.ps1
-            black --check src
+            black --check src tests
           displayName: 'Run black style check (Windows)'
 
 - stage: Docker
