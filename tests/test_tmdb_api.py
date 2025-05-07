@@ -1,6 +1,6 @@
 import src.tmdb_api as tmdb
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(dotenv_path=".env")
 
 
 def test_env_loaded():
