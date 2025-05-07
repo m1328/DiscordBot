@@ -19,7 +19,7 @@ stages:
     - job: PyTest
       displayName: 'Install deps, run pytest and black'
       pool:
-        vmImage: 'ubuntu-latest'
+         name: 'discord-bot'
       steps:
         - checkout: self
 
