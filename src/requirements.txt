@@ -4,3 +4,4 @@ python-dotenv
 aiosqlite
 cohere
 pytest
+black
