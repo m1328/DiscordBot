@@ -20,6 +20,8 @@ stages:
       displayName: 'Install deps, run pytest and black'
       pool:
         name: 'discord-bot'
+        variables:
+          - group: moviebot-credentials
       steps:
         - powershell: |
             Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process -Force
