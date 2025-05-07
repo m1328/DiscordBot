@@ -39,13 +39,11 @@ stages:
           displayName: 'Install dependencies'
 
         - powershell: |
-            .\venv\Scripts\Activate.ps1
-            pytest tests
+            .\venv\Scripts\python.exe -m pytest tests
           displayName: 'Run tests with pytest (Windows)'
 
         - powershell: |
-            .\venv\Scripts\Activate.ps1
-            black --check src tests
+            .\venv\Scripts\python.exe -m black --check src tests
           displayName: 'Run black style check (Windows)'
 
 - stage: Docker
