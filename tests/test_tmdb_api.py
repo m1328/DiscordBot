@@ -1,4 +1,11 @@
 import src.tmdb_api as tmdb
+from dotenv import load_dotenv
+load_dotenv()
+
+
+def test_env_loaded():
+    import os
+    assert os.getenv("TMDB_API_KEY") is not None, "TMDB_API_KEY is not set"
 
 
 def test_get_person_id():
