@@ -6,3 +6,4 @@ cohere
 pytest
 black
 pytest-asyncio
+coverage

@@ -3,6 +3,7 @@ import discord
 from unittest.mock import AsyncMock, MagicMock
 from discord.ext.commands import Bot
 from src import commands
+from src import tmdb_api
 
 intents = discord.Intents.default()
 
@@ -76,3 +77,16 @@ async def test_vote_too_few_movies(monkeypatch):
 
     mock_ctx.send.assert_called_once()
     assert "Not enough movies" in mock_ctx.send.call_args[0][0]
+
+
+def test_get_genre_id_found(monkeypatch):
+    class MockResponse:
+        def json(self):
+            return {
+                "genres": [{"id": 28, "name": "Action"}]
+            }
+
+    monkeypatch.setattr("src.tmdb_api.requests.get", lambda url, params: MockResponse())
+
+    genre_id = tmdb_api.get_genre_id("Action")
+    assert genre_id == 28
