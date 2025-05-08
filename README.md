@@ -27,33 +27,51 @@ Uses [Cohere](https://cohere.com/) to generate intelligent recommendations based
 - Azure DevOps Pipelines (CI/CD)
 
 ---
-
-## Docker
-
-Build and run locally:
-
-```bash
-docker build -t moviebot .
-docker run --env-file .env moviebot
+## Project Structure
+```text
+.
+├── src/
+│ ├── app.py
+│ ├── commands.py
+│ ├── cohere_api.py
+│ ├── tmdb_api.py
+│ ├── vote_database.py
+│ └── ...
+├── tests/
+│ ├── test_tmdb_api.py
+│ └── test_cohere_api.py
+├── .env
+├── requirements.txt
+├── azure-pipelines.yml
+├── Dockerfile
+└── README.md
 ```
-
 ---
-## Environment Variables
-Create a .env file with:
+## Running Locally
+1. Clone repo and set your `.env` file:
 ```token
 DISCORD_TOKEN=your_token_here
 TMDB_API_KEY=your_tmdb_key
 COHERE_API_KEY=your_cohere_key
 ```
-
 ### Where to get the API keys:
 
 - **DISCORD_TOKEN** → [Discord Developer Portal](https://discord.com/developers/applications) → Create application → Bot → Token  
 - **TMDB_API_KEY** → [TMDb Developer Portal](https://developer.themoviedb.org/) → Create account → Request API key  
 - **COHERE_API_KEY** → [Cohere Platform](https://cohere.com/) → Sign up → View API key under dashboard
 
----
-## Testing
+
+2. Install dependencies:
+```bash
+python -m venv venv
+source venv/bin/activate  # or .\venv\Scripts\activate on Windows
+pip install -r src/requirements.txt
+```
+3. Run the bot:
+```commandline
+python src/app.py
+```
+4. Run tests:
 ```testing
 pytest tests/
 black --check src/
@@ -74,6 +92,15 @@ COPY src /app/src
 COPY .env /app/.env
 
 CMD ["python", "-m", "src.app"]
+```
+---
+## Docker
+
+Build and run locally:
+
+```bash
+docker build -t moviebot .
+docker run --env-file .env moviebot
 ```
 ---
 ## Azure DevOps CI/CD
