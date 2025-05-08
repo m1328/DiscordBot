@@ -8,6 +8,15 @@ parameters:
   displayName: 'Build Docker image?'
   type: boolean
   default: true
+  
+- name: helmOperation
+  displayName: 'Helm Operation'
+  type: string
+  default: 'reinstall'
+  values:
+    - install
+    - uninstall
+    - reinstall
 
 variables:
   - group: moviebot-credentials
@@ -74,3 +83,16 @@ stages:
             Dockerfile: 'Dockerfile'
             tags: |
               latest
+
+- stage: Deploy
+  displayName: 'Deploy the application'
+  condition: and(succeeded(), eq('${{ parameters.helmOperation }}', 'install'))
+  jobs:
+    - job: SimulatedDeploy
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+        - script: |
+            echo "Simulating deploy operation: install"
+            echo "Operation: ${{ parameters.helmOperation }}"
+          displayName: 'Simulate Install'
