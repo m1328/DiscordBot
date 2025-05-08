@@ -22,6 +22,8 @@ stages:
       displayName: 'Install deps, run pytest and black'
       pool:
         name: 'discord-bot'
+      variables:
+        - group: moviebot-credentials
       steps:
         - powershell: |
             Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process -Force
@@ -48,11 +50,11 @@ stages:
 
         - powershell: |
             .\venv\Scripts\python.exe -m pytest tests
-          displayName: 'Run tests with pytest (Windows)'
+          displayName: 'Run pytest on all tests'
 
         - powershell: |
             .\venv\Scripts\python.exe -m black --check src tests
-          displayName: 'Run black style check (Windows)'
+          displayName: 'Run black style check'
 
 - stage: Docker
   displayName: 'Build and push Docker image'
