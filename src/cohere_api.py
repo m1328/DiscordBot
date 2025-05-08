@@ -1,9 +1,11 @@
 import cohere
 from src.config import COHERE_API_KEY
 
-co = cohere.Client(COHERE_API_KEY)
+def get_cohere_client():
+    return cohere.Client(COHERE_API_KEY)
 
 async def get_movie_recommendation(prompt):
+    co = get_cohere_client()
     response = co.generate(
         model="command-light",
         prompt=(

@@ -1,18 +1,70 @@
-import src.tmdb_api as tmdb
-from dotenv import load_dotenv
-load_dotenv(dotenv_path=".env")
+import pytest
+import discord
+from unittest.mock import AsyncMock, MagicMock
+from discord.ext.commands import Bot
+from src import commands
+
+intents = discord.Intents.default()
+
+@pytest.mark.asyncio
+async def test_movie_command_with_genre(monkeypatch):
+    bot = Bot(command_prefix="!", intents=intents)
+    commands.setup(bot)
+
+    mock_ctx = MagicMock()
+    mock_ctx.send = AsyncMock()
+
+    fake_movie = {"id": 1, "title": "Action Movie"}
+    fake_details = {"genres": [{"name": "Action"}], "release_date": "2020-01-01"}
+
+    monkeypatch.setattr("src.tmdb_api.search_movies", lambda **kwargs: [fake_movie])
+    monkeypatch.setattr("src.tmdb_api.get_movie_details", lambda movie_id: fake_details)
+    monkeypatch.setattr("src.tmdb_api.get_movie_director", lambda movie_id: "Director X")
+
+    command = bot.get_command("movie")
+    await command.callback(mock_ctx, query="genre=Action")
+
+    mock_ctx.send.assert_called_once()
+    assert "Action Movie" in mock_ctx.send.call_args[0][0]
 
 
-def test_env_loaded():
-    import os
-    assert os.getenv("TMDB_API_KEY") is not None, "TMDB_API_KEY is not set"
+@pytest.mark.asyncio
+async def test_movieinfo_with_real_input(monkeypatch):
+    bot = Bot(command_prefix="!", intents=intents)
+    commands.setup(bot)
+
+    mock_ctx = MagicMock()
+    mock_ctx.send = AsyncMock()
+
+    monkeypatch.setattr("src.tmdb_api.search_movie_by_title", lambda title: {"id": 42, "title": "Inception"})
+    monkeypatch.setattr("src.tmdb_api.get_movie_details", lambda movie_id: {
+        "runtime": 148,
+        "vote_average": 9.0,
+        "vote_count": 10000
+    })
+    monkeypatch.setattr("src.tmdb_api.get_movie_watch_providers", lambda movie_id: {})
+
+    command = bot.get_command("movieinfo")
+    await command.callback(mock_ctx, title="Inception")
+
+    mock_ctx.send.assert_called_once()
+    assert "Inception" in mock_ctx.send.call_args[0][0]
 
 
-def test_get_person_id():
-    id = tmdb.get_person_id("Tom Hanks")
-    assert isinstance(id, int)
+@pytest.mark.asyncio
+async def test_vote_too_few_movies(monkeypatch):
+    bot = Bot(command_prefix="!", intents=intents)
+    commands.setup(bot)
 
+    mock_ctx = MagicMock()
+    mock_ctx.send = AsyncMock()
+    mock_ctx.bot = bot
 
-def test_get_genre_id():
-    id = tmdb.get_genre_id("Comedy")
-    assert isinstance(id, int)
+    monkeypatch.setattr("src.vote_database.init_db", AsyncMock())
+    monkeypatch.setattr("src.tmdb_api.search_movies", lambda **kwargs: [{"id": 1, "title": "Solo Movie"}])
+
+    command = bot.get_command("vote")
+    await command.callback(mock_ctx, query="genre=Drama")
+
+    mock_ctx.send.assert_called_once()
+    assert "Not enough movies" in mock_ctx.send.call_args[0][0]
