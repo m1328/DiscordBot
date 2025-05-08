@@ -39,7 +39,8 @@ Uses [Cohere](https://cohere.com/) to generate intelligent recommendations based
 │ └── ...
 ├── tests/
 │ ├── test_tmdb_api.py
-│ └── test_cohere_api.py
+│ ├──test_cohere_api.py
+│ └──test_integration_commands.py
 ├── .env
 ├── requirements.txt
 ├── azure-pipelines.yml
@@ -72,6 +73,7 @@ pip install -r src/requirements.txt
 python src/app.py
 ```
 4. Run tests:
+- The project includes both unit and integration tests.
 ```testing
 pytest tests/
 black --check src/
