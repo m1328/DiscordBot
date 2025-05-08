@@ -3,12 +3,13 @@ from src.config import TMDB_API_KEY
 
 BASE_URL = "https://api.themoviedb.org/3"
 
+
 def search_movies(genre=None, year=None, actor=None, director=None):
     params = {
         "api_key": TMDB_API_KEY,
         "language": "en-US",
         "sort_by": "popularity.desc",
-        "include_adult": False
+        "include_adult": False,
     }
 
     if year:
@@ -38,8 +39,11 @@ def search_movies(genre=None, year=None, actor=None, director=None):
     print("TMDb error (search_movies):", data)
     return []
 
+
 def get_person_id(name):
-    r = requests.get(f"{BASE_URL}/search/person", params={"api_key": TMDB_API_KEY, "query": name})
+    r = requests.get(
+        f"{BASE_URL}/search/person", params={"api_key": TMDB_API_KEY, "query": name}
+    )
     data = r.json()
 
     if "results" in data and data["results"]:
@@ -49,8 +53,12 @@ def get_person_id(name):
     print("TMDb response:", data)
     return None
 
+
 def get_genre_id(name):
-    r = requests.get(f"{BASE_URL}/genre/movie/list", params={"api_key": TMDB_API_KEY, "language": "en-US"})
+    r = requests.get(
+        f"{BASE_URL}/genre/movie/list",
+        params={"api_key": TMDB_API_KEY, "language": "en-US"},
+    )
     data = r.json()
 
     if "genres" in data:
@@ -62,17 +70,19 @@ def get_genre_id(name):
     print("TMDb response:", data)
     return None
 
+
 def get_movie_details(movie_id):
-    r = requests.get(f"{BASE_URL}/movie/{movie_id}", params={
-        "api_key": TMDB_API_KEY,
-        "language": "en-US"
-    })
+    r = requests.get(
+        f"{BASE_URL}/movie/{movie_id}",
+        params={"api_key": TMDB_API_KEY, "language": "en-US"},
+    )
     return r.json()
 
+
 def get_movie_director(movie_id):
-    r = requests.get(f"{BASE_URL}/movie/{movie_id}/credits", params={
-        "api_key": TMDB_API_KEY
-    })
+    r = requests.get(
+        f"{BASE_URL}/movie/{movie_id}/credits", params={"api_key": TMDB_API_KEY}
+    )
     data = r.json()
     if "crew" in data:
         for person in data["crew"]:
@@ -80,12 +90,12 @@ def get_movie_director(movie_id):
                 return person["name"]
     return None
 
+
 def search_movie_by_title(title):
-    r = requests.get(f"{BASE_URL}/search/movie", params={
-        "api_key": TMDB_API_KEY,
-        "query": title,
-        "language": "en-US"
-    })
+    r = requests.get(
+        f"{BASE_URL}/search/movie",
+        params={"api_key": TMDB_API_KEY, "query": title, "language": "en-US"},
+    )
     data = r.json()
 
     if "results" in data and data["results"]:
@@ -95,8 +105,8 @@ def search_movie_by_title(title):
 
 
 def get_movie_watch_providers(movie_id, country="PL"):
-    r = requests.get(f"{BASE_URL}/movie/{movie_id}/watch/providers", params={
-        "api_key": TMDB_API_KEY
-    })
+    r = requests.get(
+        f"{BASE_URL}/movie/{movie_id}/watch/providers", params={"api_key": TMDB_API_KEY}
+    )
     data = r.json()
     return data.get("results", {}).get(country, {})

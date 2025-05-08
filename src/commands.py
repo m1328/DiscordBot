@@ -9,7 +9,7 @@ from src import cohere_api
 def setup(bot):
     @bot.command()
     async def movie(ctx, *, query=None):
-        """Pick a movie based on filters: !movie genre=Action year=2012 actor="Tom Hanks\""""
+        """Pick a movie based on filters: !movie genre=Action year=2012 actor="Tom Hanks\" """
         filters = {}
         if query:
             args = shlex.split(query)
@@ -22,7 +22,7 @@ def setup(bot):
             genre=filters.get("genre"),
             year=filters.get("year"),
             actor=filters.get("actor"),
-            director=filters.get("director")
+            director=filters.get("director"),
         )
 
         if not movies:
@@ -51,29 +51,24 @@ def setup(bot):
         """Shows available commands and usage"""
         message = (
             "🎬 **MovieBot – Commands**\n\n"
-
             "🎲 **!movie** – Pick a random movie based on filters:\n"
             "`!movie genre=Comedy`\n"
             "`!movie year=2012`\n"
-            "`!movie actor=\"Tom Hanks\"`\n"
-            "`!movie director=\"Christopher Nolan\"`\n"
-            "`!movie genre=Drama year=2000 actor=\"Tom Cruise\"`\n"
+            '`!movie actor="Tom Hanks"`\n'
+            '`!movie director="Christopher Nolan"`\n'
+            '`!movie genre=Drama year=2000 actor="Tom Cruise"`\n'
             "**Available filters:** `genre`, `year`, `actor`, `director`\n"
-            "If a value contains spaces, use quotes – e.g. `actor=\"Brad Pitt\"`\n\n"
-
-            "📋 **!movieinfo \"Movie Title\"** – Show movie runtime and rating\n"
-            "`!movieinfo \"Inception\"`\n"
-            "`!movieinfo \"The Godfather\"`\n\n"
-
+            'If a value contains spaces, use quotes – e.g. `actor="Brad Pitt"`\n\n'
+            '📋 **!movieinfo "Movie Title"** – Show movie runtime and rating\n'
+            '`!movieinfo "Inception"`\n'
+            '`!movieinfo "The Godfather"`\n\n'
             "🗳️ **!vote [filters]** – Vote for 1 of 3 random movies (1 minute)\n"
             "`!vote genre=Action year=2020`\n"
             "📊 **!votes** – Show results of the most recent vote\n"
             "🏆 **!topmovies** – Show top 3 voted movies of all time\n\n"
-
             "🤖 **!recommend your description** – Get an AI-generated movie suggestion\n"
             "`!recommend I'm in the mood for a sci-fi with a twist`\n"
             "`!recommend I want a sad movie about family`\n\n"
-
             "📖 **!m1328_help** – Show this help message\n"
         )
         await ctx.send(message)
@@ -117,7 +112,7 @@ def setup(bot):
             genre=filters.get("genre"),
             year=filters.get("year"),
             actor=filters.get("actor"),
-            director=filters.get("director")
+            director=filters.get("director"),
         )
 
         if not movies or len(movies) < 3:
@@ -131,7 +126,9 @@ def setup(bot):
             year = movie.get("release_date", "")[:4] or "Unknown"
             description += f"{emojis[i]} **{movie['title']}** ({year})\n"
 
-        message = await ctx.send(f"🗳️ **Vote for a movie!** (you have 1 minute)\n\n{description}")
+        message = await ctx.send(
+            f"🗳️ **Vote for a movie!** (you have 1 minute)\n\n{description}"
+        )
         for emoji in emojis:
             await message.add_reaction(emoji)
 
@@ -142,7 +139,9 @@ def setup(bot):
         vote_counts = {}
 
         for i, emoji in enumerate(emojis):
-            reaction = next((r for r in message.reactions if str(r.emoji) == emoji), None)
+            reaction = next(
+                (r for r in message.reactions if str(r.emoji) == emoji), None
+            )
             if not reaction:
                 continue
             async for user in reaction.users():
@@ -165,10 +164,12 @@ def setup(bot):
         ctx.bot.last_vote_results = {
             "message": message,
             "choices": choices,
-            "vote_counts": vote_counts
+            "vote_counts": vote_counts,
         }
 
-        await ctx.send(f"🏆 The winner is **{winning_movie['title']}** with {vote_counts[winner_index]} votes!")
+        await ctx.send(
+            f"🏆 The winner is **{winning_movie['title']}** with {vote_counts[winner_index]} votes!"
+        )
 
     @bot.command()
     async def topmovies(ctx):
