@@ -58,8 +58,15 @@ stages:
           displayName: 'Create .env file from Azure secrets'
 
         - powershell: |
-            .\venv\Scripts\python.exe -m pytest tests
+            .\venv\Scripts\python.exe -m pytest tests --junitxml=results.xml
           displayName: 'Run pytest on all tests'
+        
+        - task: PublishTestResults@2
+          displayName: 'Publish test results'
+          inputs:
+            testResultsFormat: 'JUnit'
+            testResultsFiles: 'results.xml'
+            failTaskOnFailedTests: true
 
         - powershell: |
             .\venv\Scripts\python.exe -m black --check src tests
