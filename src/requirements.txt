@@ -1,9 +1,9 @@
 discord.py
 requests
 python-dotenv
-aiosqlite
 cohere
 pytest
 black
 pytest-asyncio
 coverage
+asyncpg
