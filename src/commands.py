@@ -39,11 +39,11 @@ def setup(bot):
         director = tmdb_api.get_movie_director(movie_id) or "Unknown"
 
         await ctx.send(
-            f"🎬 **{title}**\n"
-            f"📅 Year: {year}\n"
-            f"🎞️ Genre: {genres}\n"
-            f"🎬 Director: {director}\n"
-            f"🔗 https://www.themoviedb.org/movie/{movie_id}"
+            f"**{title}**\n"
+            f"Year: {year}\n"
+            f"🎞Genre: {genres}\n"
+            f"Director: {director}\n"
+            f"https://www.themoviedb.org/movie/{movie_id}"
         )
 
     @bot.command(name="m1328_help")
@@ -51,7 +51,7 @@ def setup(bot):
         """Shows available commands and usage"""
         message = (
             "🎬 **MovieBot – Commands**\n\n"
-            "🎲 **!movie** – Pick a random movie based on filters:\n"
+            "**!movie** – Pick a random movie based on filters:\n"
             "`!movie genre=Comedy`\n"
             "`!movie year=2012`\n"
             '`!movie actor="Tom Hanks"`\n'
@@ -59,17 +59,17 @@ def setup(bot):
             '`!movie genre=Drama year=2000 actor="Tom Cruise"`\n'
             "**Available filters:** `genre`, `year`, `actor`, `director`\n"
             'If a value contains spaces, use quotes – e.g. `actor="Brad Pitt"`\n\n'
-            '📋 **!movieinfo "Movie Title"** – Show movie runtime and rating\n'
+            '**!movieinfo "Movie Title"** – Show movie runtime and rating\n'
             '`!movieinfo "Inception"`\n'
             '`!movieinfo "The Godfather"`\n\n'
-            "🗳️ **!vote [filters]** – Vote for 1 of 3 random movies (1 minute)\n"
+            "🗳**!vote [filters]** – Vote for 1 of 3 random movies (1 minute)\n"
             "`!vote genre=Action year=2020`\n"
-            "📊 **!votes** – Show results of the most recent vote\n"
-            "🏆 **!topmovies** – Show top 3 voted movies of all time\n\n"
-            "🤖 **!recommend your description** – Get an AI-generated movie suggestion\n"
+            "**!votes** – Show results of the most recent vote\n"
+            "**!topmovies** – Show top 3 voted movies of all time\n\n"
+            "**!recommend your description** – Get an AI-generated movie suggestion\n"
             "`!recommend I'm in the mood for a sci-fi with a twist`\n"
             "`!recommend I want a sad movie about family`\n\n"
-            "📖 **!m1328_help** – Show this help message\n"
+            "**!m1328_help** – Show this help message\n"
         )
         await ctx.send(message)
 
@@ -90,10 +90,10 @@ def setup(bot):
         vote_count = details.get("vote_count", "?")
 
         await ctx.send(
-            f"🎬 **{movie['title']}**\n"
-            f"⏱️ Runtime: {runtime} min\n"
-            f"⭐ Rating: {vote} ({vote_count} votes)\n"
-            f"🔗 https://www.themoviedb.org/movie/{movie_id}"
+            f"**{movie['title']}**\n"
+            f"Runtime: {runtime} min\n"
+            f"Rating: {vote} ({vote_count} votes)\n"
+            f"https://www.themoviedb.org/movie/{movie_id}"
         )
 
     @bot.command()
@@ -127,7 +127,7 @@ def setup(bot):
             description += f"{emojis[i]} **{movie['title']}** ({year})\n"
 
         message = await ctx.send(
-            f"🗳️ **Vote for a movie!** (you have 1 minute)\n\n{description}"
+            f"**Vote for a movie!** (you have 1 minute)\n\n{description}"
         )
         for emoji in emojis:
             await message.add_reaction(emoji)
@@ -168,7 +168,7 @@ def setup(bot):
         }
 
         await ctx.send(
-            f"🏆 The winner is **{winning_movie['title']}** with {vote_counts[winner_index]} votes!"
+            f"The winner is **{winning_movie['title']}** with {vote_counts[winner_index]} votes!"
         )
 
     @bot.command()
@@ -179,7 +179,7 @@ def setup(bot):
             await ctx.send("No votes recorded yet.")
             return
 
-        msg = "🏆 **Top Voted Movies:**\n"
+        msg = "**Top Voted Movies:**\n"
         for i, (title, votes) in enumerate(top, 1):
             msg += f"{i}. {title} – {votes} votes\n"
         await ctx.send(msg)
@@ -191,7 +191,7 @@ def setup(bot):
             await ctx.send("No recent voting results available.")
             return
 
-        msg = "📊 **Last Voting Results:**\n"
+        msg = "**Last Voting Results:**\n"
         for i, movie in enumerate(results["choices"]):
             title = movie["title"]
             count = results["vote_counts"].get(i, 0)
@@ -201,11 +201,11 @@ def setup(bot):
     @bot.command()
     async def recommend(ctx, *, prompt):
         """Get a movie recommendation based on your mood or preferences (via Cohere AI)"""
-        await ctx.send("🧠 Thinking...")
+        await ctx.send("Thinking...")
 
         try:
             suggestion = await cohere_api.get_movie_recommendation(prompt)
             await ctx.send(f"🎬 **AI Suggests:**\n{suggestion}")
         except Exception as e:
-            await ctx.send("❌ Something went wrong while contacting Cohere.")
+            await ctx.send("Something went wrong while contacting Cohere.")
             print("Cohere error:", e)
