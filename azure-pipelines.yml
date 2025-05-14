@@ -99,11 +99,19 @@ stages:
       pool:
         name: 'discord-bot'
       steps:
-        - powershell:
-            docker stop discord-movie-bot
-            docker rm discord-movie-bot
+        - powershell: |
+            try {
+                docker stop discord-movie-bot
+            } catch {
+                Write-Host "Container not running, nothing to stop"
+            }
+            
+            try {
+                docker rm discord-movie-bot
+            } catch {
+                Write-Host "Container not found, nothing to remove"
+            }
           displayName: 'Stop and remove old container (if exists)'
-          continueOnError: true 
 
         - script: |
             docker run -d --name discord-movie-bot m1328/discord-bot:latest
