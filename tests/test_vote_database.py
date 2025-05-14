@@ -1,6 +1,7 @@
 import pytest
 from src import vote_database
 
+
 @pytest.mark.asyncio
 async def test_add_and_get_top_movies(tmp_path):
     vote_database.DB_PATH = str(tmp_path / "votes.db")

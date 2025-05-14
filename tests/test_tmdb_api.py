@@ -82,9 +82,7 @@ async def test_vote_too_few_movies(monkeypatch):
 def test_get_genre_id_found(monkeypatch):
     class MockResponse:
         def json(self):
-            return {
-                "genres": [{"id": 28, "name": "Action"}]
-            }
+            return {"genres": [{"id": 28, "name": "Action"}]}
 
     monkeypatch.setattr("src.tmdb_api.requests.get", lambda url, params: MockResponse())
 
