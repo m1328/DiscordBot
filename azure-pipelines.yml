@@ -93,13 +93,17 @@ stages:
 
 - stage: Deploy
   displayName: 'Deploy the application'
-  condition: and(succeeded(), eq('${{ parameters.helmOperation }}', 'install'))
+  condition: and(succeeded(), or(eq('${{ parameters.helmOperation }}', 'install'), eq('${{ parameters.helmOperation }}', 'reinstall')))
   jobs:
-    - job: SimulatedDeploy
+    - job: DockerDeploy
       pool:
         name: 'discord-bot'
       steps:
         - script: |
-            echo "Simulating deploy operation: install"
-            echo "Operation: ${{ parameters.helmOperation }}"
-          displayName: 'Simulate Install'
+            docker stop discord-movie-bot || true
+            docker rm discord-movie-bot || true
+          displayName: 'Stop and remove old container (if exists)'
+
+        - script: |
+            docker run -d --name discord-movie-bot m1328/discord-bot:latest
+          displayName: 'Run Discord bot container'
