@@ -78,7 +78,7 @@ stages:
   jobs:
     - job: DockerBuild
       pool:
-        vmImage: 'ubuntu-latest'
+        name: 'discord-bot'
       steps:
         - checkout: self
 
@@ -97,7 +97,7 @@ stages:
   jobs:
     - job: SimulatedDeploy
       pool:
-        vmImage: 'ubuntu-latest'
+        name: 'discord-bot'
       steps:
         - script: |
             echo "Simulating deploy operation: install"
