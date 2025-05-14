@@ -100,9 +100,10 @@ stages:
         name: 'discord-bot'
       steps:
         - powershell:
-            docker stop discord-movie-bot -ErrorAction SilentlyContinue
-            docker rm discord-movie-bot -ErrorAction SilentlyContinue
+            docker stop discord-movie-bot
+            docker rm discord-movie-bot
           displayName: 'Stop and remove old container (if exists)'
+          continueOnError: true 
 
         - script: |
             docker run -d --name discord-movie-bot m1328/discord-bot:latest
