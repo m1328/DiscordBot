@@ -99,9 +99,9 @@ stages:
       pool:
         name: 'discord-bot'
       steps:
-        - script: |
-            docker stop discord-movie-bot || true
-            docker rm discord-movie-bot || true
+        - powershell:
+            docker stop discord-movie-bot -ErrorAction SilentlyContinue
+            docker rm discord-movie-bot -ErrorAction SilentlyContinue
           displayName: 'Stop and remove old container (if exists)'
 
         - script: |
