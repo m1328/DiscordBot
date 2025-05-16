@@ -62,7 +62,7 @@ def setup(bot):
             '**!movieinfo "Movie Title"** – Show movie runtime and rating\n'
             '`!movieinfo "Inception"`\n'
             '`!movieinfo "The Godfather"`\n\n'
-            "🗳**!vote [filters]** – Vote for 1 of 3 random movies (1 minute)\n"
+            "**!vote [filters]** – Vote for 1 of 3 random movies (1 minute)\n"
             "`!vote genre=Action year=2020`\n"
             "**!votes** – Show results of the most recent vote\n"
             "**!topmovies** – Show top 3 voted movies of all time\n\n"

@@ -16,7 +16,7 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.event
 async def on_ready():
-    print(f"🎬 Zalogowano jako {bot.user}")
+    print(f"Zalogowano jako {bot.user}")
 
 
 movie_commands.setup(bot)
