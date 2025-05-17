@@ -116,3 +116,27 @@ stages:
         - script: |
             docker run -d --name discord-movie-bot m1328/discord-bot:latest
           displayName: 'Run Discord bot container'
+
+- stage: Remove
+  displayName: 'Remove the application'
+  condition: eq('${{ parameters.helmOperation }}', 'uninstall')
+  jobs:
+    - job: DockerRemove
+      pool:
+        name: 'discord-bot'
+      steps:
+        - powershell: |
+            try {
+                docker stop discord-movie-bot
+            } catch {
+                Write-Host "Container not running"
+            }
+
+            try {
+                docker rm discord-movie-bot
+            } catch {
+                Write-Host "Container not found"
+            }
+
+            Write-Host "Discord bot container removed"
+          displayName: 'Stop and remove bot container'
