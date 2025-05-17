@@ -1,5 +1,6 @@
 import requests
 from src.config import TMDB_API_KEY
+import logging
 
 BASE_URL = "https://api.themoviedb.org/3"
 
@@ -36,7 +37,7 @@ def search_movies(genre=None, year=None, actor=None, director=None):
     if "results" in data:
         return data["results"]
 
-    print("TMDb error (search_movies):", data)
+    logging.warning(f"TMDb error (search_movies): {data}")
     return []
 
 
@@ -49,8 +50,8 @@ def get_person_id(name):
     if "results" in data and data["results"]:
         return data["results"][0]["id"]
 
-    print(f"No person found: {name}")
-    print("TMDb response:", data)
+    logging.info(f"No person found: {name}")
+    logging.debug(f"TMDb response: {data}")
     return None
 
 
@@ -66,8 +67,8 @@ def get_genre_id(name):
             if genre["name"].lower() == name.lower():
                 return genre["id"]
 
-    print(f"Genre not found: {name}")
-    print("TMDb response:", data)
+    logging.info(f"Genre not found: {name}")
+    logging.debug(f"TMDb response: {data}")
     return None
 
 

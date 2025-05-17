@@ -4,7 +4,7 @@ import shlex
 import asyncio
 from src import vote_database
 from src import cohere_api
-
+import logging
 
 def setup(bot):
     @bot.command()
@@ -208,4 +208,4 @@ def setup(bot):
             await ctx.send(f"🎬 **AI Suggests:**\n{suggestion}")
         except Exception as e:
             await ctx.send("Something went wrong while contacting Cohere.")
-            print("Cohere error:", e)
+            logging.error(f"Cohere error: {e}")

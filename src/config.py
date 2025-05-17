@@ -1,4 +1,11 @@
 import os
+import logging
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 env_path = ".env"
 if os.path.exists(env_path):
@@ -12,4 +19,4 @@ DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 COHERE_API_KEY = os.getenv("COHERE_API_KEY")
 
-print(f"TMDB_API_KEY = {TMDB_API_KEY}")
+logging.info("TMDB_API_KEY loaded")

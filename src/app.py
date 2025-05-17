@@ -3,6 +3,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import os
 from src import commands as movie_commands
+import logging
 
 load_dotenv()
 
@@ -16,7 +17,7 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.event
 async def on_ready():
-    print(f"Zalogowano jako {bot.user}")
+    logging.info(f"Zalogowano jako {bot.user}")
 
 
 movie_commands.setup(bot)
